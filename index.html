@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio Hub</title>
+    <!-- Font Awesome Link for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Global Styles & Reset */
         * {
@@ -20,23 +22,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 3rem 1rem;
+            padding: 2rem 1rem;
             overflow-x: hidden;
         }
 
         /* Profile Section */
         .profile-container {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-top: 1rem;
+            margin-bottom: 3rem;
             animation: fadeInDown 0.8s ease-out;
+            width: 100%;
+            max-width: 400px;
         }
 
         .profile-pic {
-            width: 130px;
-            height: 130px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #ffffff; /* Sharp White Border */
+            border: 2px solid #ffffff; 
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -46,36 +51,37 @@
         }
 
         .profile-name {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-top: 1.2rem;
+            margin-top: 1rem;
             letter-spacing: -0.5px;
-            color: #ffffff;
         }
 
         .profile-bio {
-            color: #a3a3a3; /* Muted Gray */
-            font-size: 1.1rem;
+            color: #a3a3a3; 
+            font-size: 1rem;
             margin-top: 0.5rem;
-            max-width: 500px;
+            line-height: 1.4;
+            padding: 0 1rem;
         }
 
-        /* Cards Grid Layout */
+        /* Cards Grid Layout - Responsive Mobile First */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr; /* Stacked on Mobile */
+            gap: 1.2rem;
             width: 100%;
-            max-width: 900px;
-            padding: 0 1rem;
+            max-width: 600px;
+            padding: 0 0.5rem;
+            margin-bottom: 4rem;
         }
 
         /* Card Styling & Smooth Animations */
         .card {
-            background: #121212; /* Very Dark Gray Card */
-            border: 1px solid #262626; /* Subtle Border */
+            background: #121212; 
+            border: 1px solid #262626; 
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.2rem;
             text-decoration: none;
             color: inherit;
             display: flex;
@@ -84,26 +90,23 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            transform: translateY(0);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             opacity: 0;
             animation: fadeInUp 0.6s ease-out forwards;
         }
 
-        /* Staggered animation delay for cards */
-        .card:nth-child(1) { animation-delay: 0.2s; }
-        .card:nth-child(2) { animation-delay: 0.3s; }
-        .card:nth-child(3) { animation-delay: 0.4s; }
+        /* Staggered animation delays */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
 
         /* Card Hover Effects */
         .card:hover {
-            transform: translateY(-8px);
-            border-color: #ffffff; /* Border turns white on hover */
+            transform: translateY(-4px);
+            border-color: #ffffff; 
             background: #1a1a1a;
-            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.05);
         }
 
-        /* Decorative white accent line on card hover */
         .card::before {
             content: '';
             position: absolute;
@@ -122,66 +125,192 @@
         }
 
         .card-title {
-            font-size: 1.3rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #ffffff;
+            margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .card-description {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #a3a3a3;
-            line-height: 1.5;
+            line-height: 1.4;
+            padding-right: 1.5rem;
         }
 
         .arrow-icon {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             transition: transform 0.3s ease;
             color: #ffffff;
         }
 
         .card:hover .arrow-icon {
-            transform: translateX(5px);
+            transform: translateX(4px);
+        }
+
+        /* Contact Me Section */
+        .contact-section {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem 1rem;
+            border-top: 1px solid #262626;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out 0.4s forwards;
+            margin-bottom: 6rem; /* Extra spacing so the player doesn't block content */
+        }
+
+        .contact-heading {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .contact-icon-btn {
+            color: #a3a3a3;
+            text-decoration: none;
+            font-size: 1.6rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .contact-icon-btn:hover {
+            color: #ffffff;
+            transform: scale(1.15);
+        }
+
+        /* Mobile-Optimized Floating Audio Controller */
+        .audio-player-container {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%); /* Perfectly centered on Mobile screen widths */
+            background: rgba(18, 18, 18, 0.9);
+            border: 1px solid #262626;
+            backdrop-filter: blur(12px);
+            padding: 10px 16px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            width: calc(100% - 32px); /* Scales dynamic with screen width */
+            max-width: 310px; /* Locks compact width sizing */
+            transition: border-color 0.3s ease;
+        }
+
+        .audio-player-container:hover {
+            border-color: #ffffff;
+        }
+
+        .audio-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .track-info {
+            font-size: 0.75rem;
+            color: #a3a3a3;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        /* Responsive Smooth Volume Slider */
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 65px;
+            height: 3px;
+            background: #262626;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffffff;
+        }
+
+        #youtube-player {
+            display: none;
+        }
+
+        /* Media Queries for Desktop layout adjustments */
+        @media (min-width: 768px) {
+            body { padding: 3rem 1rem; }
+            .profile-pic { width: 130px; height: 130px; }
+            .profile-name { font-size: 2.2rem; }
+            .links-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); padding: 0 1rem; }
+            .card { padding: 1.5rem; }
+            .card-title { font-size: 1.3rem; }
+            /* Float controller to bottom right on desktop views */
+            .audio-player-container {
+                left: auto;
+                right: 20px;
+                transform: none;
+                width: auto;
+            }
         }
 
         /* Keyframe Animations */
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Profile Section -->
+    <!-- Hidden Video Player Target Framework -->
+    <div id="youtube-player"></div>
+
+    <!-- Mobile-Centered Audio Widget -->
+    <div class="audio-player-container">
+        <button class="audio-btn" id="play-pause-btn" title="Play Music">
+            <i class="fa-solid fa-play"></i>
+        </button>
+        <span class="track-info">Hinoki Wood</span>
+        <i class="fa-solid fa-volume-low" style="font-size: 0.75rem; color: #a3a3a3;"></i>
+        <input type="range" class="volume-slider" id="volume-control" min="0" max="100" value="50">
+    </div>
+
+    <!-- Profile Headliner Layout -->
     <div class="profile-container">
-        <!-- Direct Imgur GIF URL integrated below -->
         <img src="https://i.imgur.com/H5m4U6F.gif" alt="Thorfinn Profile" class="profile-pic">
         <h1 class="profile-name">Thorfinn</h1>
         <p class="profile-bio">Web Developer & Designer. "I have no enemies." Welcome to my personal showcase space.</p>
     </div>
 
-    <!-- Links/Cards Grid -->
+    <!-- Responsive Layout Showcase Grid -->
     <div class="links-grid">
         
         <!-- CARD 1 -->
@@ -218,6 +347,112 @@
         </a>
 
     </div>
+
+    <!-- Footer Network Grid Layout -->
+    <div class="contact-section">
+        <h2 class="contact-heading">Connect With Me</h2>
+        <div class="contact-links">
+            <a href="mailto:your-email@example.com" class="contact-icon-btn" title="Email">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="https://github.com" target="_blank" class="contact-icon-btn" title="GitHub">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="https://discord.com" target="_blank" class="contact-icon-btn" title="Discord">
+                <i class="fa-brands fa-discord"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Script Handling Autoplay & Touch-triggers Seamlessly -->
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var hasInteracted = false;
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const volumeControl = document.getElementById('volume-control');
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'WQbr61qVby8',
+                playerVars: {
+                    'autoplay': 1,
+                    'loop': 1,
+                    'playlist': 'WQbr61qVby8',
+                    'controls': 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            player.setVolume(50);
+            
+            // Try to autoplay immediately (Works if browser rules allow it)
+            player.playVideo();
+
+            // FORCE AUTOPLAY: Triggers audio playback on the visitor's very first click anywhere on screen
+            document.body.addEventListener('click', autoPlayFallback, { once: true });
+            document.body.addEventListener('touchstart', autoPlayFallback, { once: true });
+
+            // Manual Play/Pause Button Logic
+            playPauseBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Stops conflicts with body click triggers
+                handleTogglePlay();
+            });
+
+            // Adjust Volume Volume controls smoothly
+            volumeControl.addEventListener('input', (e) => {
+                player.setVolume(e.target.value);
+            });
+        }
+
+        function autoPlayFallback() {
+            if (!hasInteracted) {
+                player.playVideo();
+                hasInteracted = true;
+            }
+        }
+
+        function handleTogglePlay() {
+            const playerState = player.getPlayerState();
+            if (playerState === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                updateUiPause();
+            } else {
+                player.playVideo();
+                updateUiPlay();
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                updateUiPlay();
+                hasInteracted = true;
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                updateUiPause();
+            }
+        }
+
+        function updateUiPlay() {
+            playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            playPauseBtn.setAttribute('title', 'Pause Music');
+        }
+
+        function updateUiPause() {
+            playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            playPauseBtn.setAttribute('title', 'Play Music');
+        }
+    </script>
 
 </body>
 </html>
