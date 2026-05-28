@@ -82,10 +82,13 @@
         .profile-container {
             text-align: center;
             margin-top: 1rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             animation: fadeInDown 0.8s ease-out;
             width: 100%;
             max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .profile-pic {
@@ -112,6 +115,26 @@
             line-height: 1.4;
             padding: 0 1rem;
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        /* Views Counter Styling */
+        .view-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #8a8a8a;
+            margin-top: 0.8rem;
+            backdrop-filter: blur(4px);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .view-counter i {
+            font-size: 0.85rem;
         }
 
         /* Links Grid */
@@ -205,7 +228,7 @@
             gap: 12px;
             z-index: 9999;
             width: calc(100% - 32px);
-            max-width: 340px; /* Slight width expansion to safely account for new layout button */
+            max-width: 340px;
         }
 
         .audio-btn, .bg-toggle-btn {
@@ -293,13 +316,19 @@
         <img src="https://i.imgur.com/H5m4U6F.gif" alt="Thorfinn" class="profile-pic">
         <h1 class="profile-name">Thorfinn</h1>
         <p class="profile-bio">Web Developer & Designer. "I have no enemies." Welcome to my personal showcase space.</p>
+        
+        <!-- DESIGN VIEW COUNTER -->
+        <div class="view-counter">
+            <i class="fa-regular fa-eye"></i>
+            <span>752K+ views</span>
+        </div>
     </div>
 
     <!-- PROJECT CARDS -->
     <div class="links-grid">
         <a href="https://roblox-game-checker.onrender.com" target="_blank" class="card">
             <div class="card-title">Roblox Tools <i class="fa-solid fa-arrow-right"></i></div>
-            <p class="card-description">Used to Scan User,Game, and paste game id to watch live data..</p>
+            <p class="card-description">Used to Scan User, Game, and paste game id to watch live data.</p>
         </a>
         <a href="https://getlinkgrabify.onrender.com" target="_blank" class="card">
             <div class="card-title">Video Downloader <i class="fa-solid fa-arrow-right"></i></div>
@@ -307,7 +336,7 @@
         </a>
         <a href="https://ai-pro-prompter.onrender.com" target="_blank" class="card">
             <div class="card-title">PromptLens <i class="fa-solid fa-arrow-right"></i></div>
-            <p class="card-description">Drop an image. Get the prompt..</p>
+            <p class="card-description">Drop an image. Get the prompt.</p>
         </a>
     </div>
 
