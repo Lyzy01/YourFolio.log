@@ -39,13 +39,12 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1;
-            opacity: 0; /* Hidden by default */
+            opacity: 0; 
             transition: opacity 0.8s ease-in-out;
         }
 
-        /* Active Class triggered by JS */
         .bg-gif-layer.active {
-            opacity: 0.35; /* Blends nicely with the portfolio text readability */
+            opacity: 0.35;
         }
 
         /* Click to Enter Overlay */
@@ -85,7 +84,7 @@
             margin-bottom: 2.5rem;
             animation: fadeInDown 0.8s ease-out;
             width: 100%;
-            max-width: 400px;
+            max-width: 550px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -117,24 +116,35 @@
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
         }
 
-        /* Views Counter Styling */
-        .view-counter {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            color: #8a8a8a;
-            margin-top: 0.8rem;
-            backdrop-filter: blur(4px);
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .view-counter i {
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.85rem;
+            color: #e0e0e0;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Custom Image Icon Styling */
+        .custom-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
         }
 
         /* Links Grid */
@@ -183,7 +193,7 @@
             line-height: 1.4;
         }
 
-        /* Contact Me */
+        /* Contact Section */
         .contact-section {
             text-align: center;
             width: 100%;
@@ -212,7 +222,7 @@
             transform: scale(1.2);
         }
 
-        /* Audio Player UI */
+        /* Audio Player */
         .audio-player-container {
             position: fixed;
             bottom: 16px;
@@ -246,19 +256,6 @@
             border-left: 1px solid #262626;
         }
 
-        .bg-toggle-btn:hover {
-            color: #ffffff;
-        }
-
-        .track-info {
-            font-size: 0.75rem;
-            color: #a3a3a3;
-            flex-grow: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         .volume-slider {
             -webkit-appearance: none;
             width: 55px;
@@ -276,21 +273,13 @@
 
         #youtube-player-wrapper { display: none; }
 
-        /* Responsiveness */
-        @media (min-width: 768px) {
-            .links-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-            .audio-player-container { left: auto; right: 20px; transform: none; }
-        }
-
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <!-- Full-Screen Animated Background Asset Vector Layer -->
     <div class="bg-gif-layer" id="background-gif"></div>
 
-    <!-- CLICK TO ENTER OVERLAY -->
     <div id="enter-overlay">
         <p>CLICK TO ENTER</p>
     </div>
@@ -299,36 +288,39 @@
         <div id="youtube-player"></div>
     </div>
 
-    <!-- AUDIO PLAYER & BACKGROUND TOGGLE FRAMEWORK -->
+    <!-- AUDIO PLAYER -->
     <div class="audio-player-container">
-        <button class="audio-btn" id="play-pause-btn" title="Play/Pause"><i class="fa-solid fa-play"></i></button>
+        <button class="audio-btn" id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
         <span class="track-info">Hinoki Wood</span>
         <input type="range" class="volume-slider" id="volume-control" min="0" max="100" value="50">
-        
-        <!-- Animated Canvas/GIF Trigger Viewport Control Button -->
-        <button class="bg-toggle-btn" id="bg-toggle" title="Toggle Background Video">
-            <i class="fa-solid fa-video"></i>
-        </button>
+        <button class="bg-toggle-btn" id="bg-toggle"><i class="fa-solid fa-video"></i></button>
     </div>
 
     <!-- PROFILE -->
     <div class="profile-container">
         <img src="https://i.imgur.com/H5m4U6F.gif" alt="Thorfinn" class="profile-pic">
         <h1 class="profile-name">Lyzy | Kim</h1>
-        <p class="profile-bio">Web Developer,Designer&Roblox Game Developer. "I have no enemies." Welcome to my personal showcase space.</p>
+        <p class="profile-bio">Web Developer, Designer & Roblox Game Developer. "I have no enemies."</p>
         
-        <!-- DESIGN VIEW COUNTER -->
-        <div class="view-counter">
-            <i class="fa-regular fa-eye"></i>
-            <span>752K+ views</span>
+        <div class="stats-row">
+            <div class="stat-badge">
+                <i class="fa-regular fa-eye"></i>
+                <span>752K+ views</span>
+            </div>
+
+            <div class="stat-badge">
+                <!-- REPLACE THE SRC URL BELOW WITH YOUR ACTUAL ROBUX ICON LINK -->
+                <img src="INSERT_YOUR_IMAGE_URL_HERE" class="custom-icon" alt="icon">
+                <span>Robux Generated: <span id="robux-counter">0</span></span>
+            </div>
         </div>
     </div>
 
-    <!-- PROJECT CARDS -->
+    <!-- CARDS -->
     <div class="links-grid">
         <a href="https://roblox-game-checker.onrender.com" target="_blank" class="card">
             <div class="card-title">Roblox Tools <i class="fa-solid fa-arrow-right"></i></div>
-            <p class="card-description">Used to Scan User, Game, and paste game id to watch live data.</p>
+            <p class="card-description">Used to Scan User, Game, and live data.</p>
         </a>
         <a href="https://getlinkgrabify.onrender.com" target="_blank" class="card">
             <div class="card-title">Video Downloader <i class="fa-solid fa-arrow-right"></i></div>
@@ -344,13 +336,32 @@
     <div class="contact-section">
         <h2 class="contact-heading">Connect With Me</h2>
         <div class="contact-links">
-            <a href="kimmendezfeb01@gmail.com" class="contact-icon-btn"><i class="fa-solid fa-envelope"></i></a>
+            <a href="mailto:kimmendezfeb01@gmail.com" class="contact-icon-btn"><i class="fa-solid fa-envelope"></i></a>
             <a href="https://github.com/Lyzy01" target="_blank" class="contact-icon-btn"><i class="fa-brands fa-github"></i></a>
             <a href="https://discord.com/users/kimmendez01" target="_blank" class="contact-icon-btn"><i class="fa-brands fa-discord"></i></a>
         </div>
     </div>
 
     <script>
+        // SLOW YOUTUBE STYLE COUNTER INTERPOLATION
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                
+                // Cubic ease-out deceleration curve mimicry
+                const easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                
+                const currentVal = Math.floor(easeOutProgress * (end - start) + start);
+                obj.innerHTML = currentVal.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -373,46 +384,29 @@
 
         function onPlayerReady(event) {
             player.setVolume(50);
-            
             overlay.addEventListener('click', () => {
                 player.playVideo();
                 overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 800);
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    // Fires the 8000ms (8 seconds) deceleration calculation sequence
+                    animateValue(document.getElementById("robux-counter"), 0, 132435742, 8000);
+                }, 800);
             });
-
-            volumeControl.addEventListener('input', (e) => {
-                player.setVolume(e.target.value);
-            });
-
+            volumeControl.addEventListener('input', (e) => player.setVolume(e.target.value));
             playPauseBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
+                player.getPlayerState() === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
             });
-
-            // Smooth Background Transition Toggle Interaction Logic
             bgToggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 backgroundGif.classList.toggle('active');
-                
-                // Visual feedback updating the button state accent styling
-                if (backgroundGif.classList.contains('active')) {
-                    bgToggleBtn.style.color = '#ffffff';
-                } else {
-                    bgToggleBtn.style.color = '#a3a3a3';
-                }
+                bgToggleBtn.style.color = backgroundGif.classList.contains('active') ? '#ffffff' : '#a3a3a3';
             });
         }
 
         function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            } else {
-                playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-            }
+            playPauseBtn.innerHTML = event.data === YT.PlayerState.PLAYING ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
         }
     </script>
 </body>
