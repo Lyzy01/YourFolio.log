@@ -1,10 +1,10 @@
 <div align="center">
 
-# 📜 Lyzy | Paper Portfolio
+# 📜 "YOUR"Folio
 
 A unique, tactile **paper and ink** aesthetic personal portfolio featuring interactive paper animations, 3D tilted index cards, a live Lanyard Discord widget, an interactive rubber ink stamp, and an ambient YouTube audio player.
 
-[Live Demo](#) · [Report Bug](https://github.com/Lyzy01/Porfolio1v1/issues) · [Request Feature](https://github.com/Lyzy01/Porfolio1v1/issues)
+[Live Demo](https://lyzyakakim.onrender.com) · [Report Bug](https://github.com/Lyzy01/Porfolio1v1/issues) · [Request Feature](https://github.com/Lyzy01/Porfolio1v1/issues)
 
 </div>
 
@@ -23,7 +23,7 @@ A unique, tactile **paper and ink** aesthetic personal portfolio featuring inter
 ## 🛠️ Built With
 
 * **HTML5 / CSS3** (Custom Properties, Flexbox, CSS 3D Transforms)
-* **JavaScript (Vanilla ES6+)** (Web Audio API, Lanyard WebSocket/REST integration)
+* **JavaScript (Vanilla ES6+)** (Web Audio API, Lanyard REST integration)
 * **Font Awesome** (Icons)
 * **Google Fonts** (*Lora* & *JetBrains Mono*)
 
@@ -35,4 +35,45 @@ To run or customize this portfolio locally on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Lyzy01/Porfolio1v1.git](https://github.com/Lyzy01/Porfolio1v1.git)
+   git clone https://github.com/Lyzy01/Porfolio1v1.git
+   ```
+2. **Navigate to the project directory:**
+   ```bash
+   cd Porfolio1v1
+   ```
+3. **Open `index.html`:**
+   * Double-click `index.html` to open it in your browser, or open it using **VS Code Live Server** to ensure the live Lanyard API fetches correctly without CORS issues.
+
+---
+
+## ⚙️ Configuration
+
+If you want to sync your own live Discord status, open `index.html` and update your 18-digit Discord User ID near the bottom script section:
+
+```javascript
+const DISCORD_USER_ID = "1366110873248071801";
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Lyzy01/Porfolio1v1/issues).
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+Distributed under the **MIT License**. See `LICENSE` for more information.
+
+---
+
+<div align="center">
+  <sub>Crafted with 🖤 and ink for **"YOUR"Folio** by <a href="https://github.com/Lyzy01">Lyzy | Kim</a></sub>
+</div>
