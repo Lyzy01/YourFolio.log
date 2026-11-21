@@ -1,12 +1,8 @@
-<div align="center">
-
 # 📜 "YOUR"Folio
 
 A unique, tactile **paper and ink** aesthetic personal portfolio featuring interactive paper animations, 3D tilted index cards, a live Lanyard Discord widget, an interactive rubber ink stamp, and an ambient YouTube audio player.
 
 [Live Demo](https://lyzyakakim.onrender.com) · [Report Bug](https://github.com/Lyzy01/Porfolio1v1/issues) · [Request Feature](https://github.com/Lyzy01/Porfolio1v1/issues)
-
-</div>
 
 ---
 
@@ -56,24 +52,20 @@ const DISCORD_USER_ID = "1366110873248071801";
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contributing & Customization
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Lyzy01/Porfolio1v1/issues).
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+You are free to fork, edit, and adapt this project for your own portfolio. While optional, leaving a small credit or link back to the original repository is always appreciated!
 
 ---
 
 ## 📝 License
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+Distributed under the **MIT License**. See the `LICENSE` file for more information.
 
 ---
 
 <div align="center">
-  <sub>Crafted with 🖤 and ink for **"YOUR"Folio** by <a href="https://github.com/Lyzy01">Lyzy | Kim</a></sub>
+  <sub>Crafted with 🖤 and ink by <a href="https://github.com/Lyzy01">Lyzy | Kim</a></sub>
 </div>
