@@ -481,6 +481,7 @@
         .status-online { background: #23a55a; }
         .status-idle { background: #f0b232; }
         .status-dnd { background: #f23f43; }
+        .status-offline { background: #80848e; }
 
         .discord-info {
             display: flex;
@@ -502,20 +503,20 @@
             color: var(--ink-main);
         }
 
-        /* Discord Badges Pill */
+        /* Discord Badges Container (Multiple Badges Support) */
         .discord-badges {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            background: rgba(128, 128, 128, 0.1);
+            gap: 4px;
+            background: rgba(128, 128, 128, 0.08);
             border: 1px dashed var(--border-ink);
             padding: 2px 6px;
             border-radius: 3px;
         }
 
         .discord-badge-icon {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             object-fit: contain;
         }
 
@@ -886,7 +887,7 @@
             <div class="discord-info">
                 <div class="discord-header-row">
                     <span class="discord-username" id="dc-username">kimmendez01</span>
-                    <!-- Dynamic Discord Badges Container -->
+                    <!-- Dynamic Discord Multiple Badges Container -->
                     <div class="discord-badges" id="dc-badges" title="Discord Profile Badges"></div>
                 </div>
                 <span class="discord-activity" id="dc-activity">Connecting to Discord...</span>
@@ -972,12 +973,21 @@
                     avatarEl.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=128`;
                 }
 
-                // Update Status Dot & Text
+                // Update Status Dot & Text (Online, Idle, DND, Offline)
                 statusDot.className = "discord-status-dot";
                 statusDot.classList.add(`status-${data.discord_status}`);
-                statusText.textContent = data.discord_status.toUpperCase();
+                
+                if (data.discord_status === "dnd") {
+                    statusText.textContent = "DND";
+                } else if (data.discord_status === "idle") {
+                    statusText.textContent = "IDLE";
+                } else if (data.discord_status === "online") {
+                    statusText.textContent = "ONLINE";
+                } else {
+                    statusText.textContent = "OFFLINE";
+                }
 
-                // Decode Public Flags into Badges
+                // Decode ALL Public Flags into Badges correctly
                 const flags = user.public_flags || 0;
                 let badgesHTML = "";
                 BADGE_FLAGS.forEach(b => {
