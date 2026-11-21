@@ -3,28 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lyzy | My Portfolio </title>
+    <title>Lyzy | My Portfolio</title>
     <!-- Font Awesome Link for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for Editorial & Typewriter Paper Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
         /* Global Styles & Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --paper-bg: #f4f1ea;
+            --card-bg: #fcfaf5;
+            --ink-main: #1c1b18;
+            --ink-muted: #5c584f;
+            --border-ink: #2b2924;
+            --line-color: rgba(28, 27, 24, 0.06);
+            --tape-color: rgba(226, 218, 198, 0.9);
+            --transition-speed: 0.6s;
+        }
+
+        /* Dark Noir Mode Variables */
+        body.noir-mode {
+            --paper-bg: #131211;
+            --card-bg: rgba(24, 23, 21, 0.92);
+            --ink-main: #f4f1ea;
+            --ink-muted: #b5b0a1;
+            --border-ink: #d4cfc4;
+            --line-color: rgba(244, 241, 234, 0.04);
+            --tape-color: rgba(60, 58, 54, 0.85);
         }
 
         body {
-            background: #000000;
-            color: #ffffff;
+            background-color: var(--paper-bg);
+            background-image: 
+                linear-gradient(var(--line-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: var(--ink-main);
+            font-family: 'JetBrains Mono', monospace;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 1rem;
+            padding: 3rem 1.2rem;
             overflow-x: hidden;
             position: relative;
+            perspective: 1200px;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        /* Paper Grain Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
+        }
+
+        /* Floating Paper Scraps Layer */
+        #paper-scraps-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .paper-scrap {
+            position: absolute;
+            background: var(--card-bg);
+            border: 1px solid var(--border-ink);
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+            opacity: 0.45;
+            animation: floatScrap linear infinite;
+            transition: background var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        @keyframes floatScrap {
+            0% { transform: translateY(110vh) rotate(0deg) rotateX(0deg); }
+            50% { transform: translateY(50vh) translateX(25px) rotate(180deg) rotateX(45deg); }
+            100% { transform: translateY(-15vh) translateX(-15px) rotate(360deg) rotateX(0deg); }
+        }
+
+        /* Ink Ripple on Click */
+        .ink-ripple {
+            position: fixed;
+            border: 1.5px solid var(--border-ink);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            animation: inkSpread 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 9997;
+        }
+
+        @keyframes inkSpread {
+            0% { width: 10px; height: 10px; opacity: 0.7; transform: translate(-50%, -50%) scale(0.2); }
+            100% { width: 90px; height: 90px; opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
         }
 
         /* Full Screen Animated Background GIF Layer */
@@ -40,87 +131,164 @@
             background-repeat: no-repeat;
             z-index: -1;
             opacity: 0; 
-            transition: opacity 0.8s ease-in-out;
+            mix-blend-mode: multiply;
+            filter: grayscale(100%) contrast(1.1);
+            transition: opacity 0.8s ease-in-out, filter 0.8s ease-in-out;
         }
 
-        .bg-gif-layer.active {
-            opacity: 0.35;
+        /* When Noir Mode + GIF active, make GIF gorgeous and vibrant */
+        body.noir-mode .bg-gif-layer.active {
+            opacity: 0.65;
+            mix-blend-mode: normal;
+            filter: contrast(1.15) saturate(1.2);
         }
 
-        /* Click to Enter Overlay */
+        /* When Light Mode + GIF active, soft tint wash */
+        body:not(.noir-mode) .bg-gif-layer.active {
+            opacity: 0.16;
+            mix-blend-mode: multiply;
+            filter: grayscale(100%) contrast(1.1);
+        }
+
+        /* Click to Enter Overlay (Page Turn Exit) */
         #enter-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: var(--paper-bg);
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 28px 28px;
             z-index: 10000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: opacity 0.8s ease;
+            transform-origin: top center;
+            transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s ease, background-color 0.5s ease;
+        }
+
+        #enter-overlay.page-peel {
+            transform: rotateX(85deg) translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         #enter-overlay p {
-            letter-spacing: 5px;
-            font-size: 0.8rem;
-            color: #ffffff;
-            animation: pulse 2s infinite;
+            letter-spacing: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink-main);
+            border: 1.5px solid var(--border-ink);
+            padding: 14px 28px;
+            background: var(--card-bg);
+            box-shadow: 5px 5px 0px var(--border-ink);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+            animation: stampPulse 2.2s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
+        #enter-overlay:hover p {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--border-ink);
+        }
+
+        @keyframes stampPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* Staggered Paper Drop-In Entrance Classes */
+        .paper-reveal {
+            opacity: 0;
+            transform: translateY(24px) rotate(-1.5deg);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), 
+                        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        body.entered .paper-reveal {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
         }
 
         /* Profile Section */
         .profile-container {
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             margin-bottom: 2.5rem;
-            animation: fadeInDown 0.8s ease-out;
             width: 100%;
             max-width: 550px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-pic-frame {
+            padding: 6px;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-ink);
+            box-shadow: 4px 4px 0px var(--border-ink);
+            border-radius: 50%;
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        .profile-pic-frame:hover {
+            transform: rotate(6deg) scale(1.05);
         }
 
         .profile-pic {
-            width: 110px;
-            height: 110px;
+            width: 105px;
+            height: 105px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #ffffff; 
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+            display: block;
+            border: 1px solid var(--border-ink);
         }
 
         .profile-name {
-            font-size: 1.8rem;
+            font-family: 'Lora', serif;
+            font-size: 2.1rem;
             font-weight: 700;
-            margin-top: 1rem;
+            margin-top: 1.1rem;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            color: var(--ink-main);
+            transition: color var(--transition-speed) ease;
         }
 
         .profile-bio {
-            color: #a3a3a3; 
-            font-size: 1rem;
-            margin-top: 0.5rem;
-            line-height: 1.4;
+            color: var(--ink-muted); 
+            font-size: 0.88rem;
+            margin-top: 0.6rem;
+            line-height: 1.6;
             padding: 0 1rem;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            min-height: 3.2em;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 7px;
+            height: 1em;
+            background-color: var(--ink-main);
+            vertical-align: text-bottom;
+            margin-left: 2px;
+            animation: blink 0.9s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* Stats Row */
         .stats-row {
             display: flex;
-            gap: 10px;
-            margin-top: 1.2rem;
+            gap: 12px;
+            margin-top: 1.4rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -129,155 +297,298 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            border: 1.5px dashed var(--border-ink);
             padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #e0e0e0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--ink-main);
+            box-shadow: 2px 2px 0px var(--border-ink);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
-        /* Custom Image Icon Styling for your Robux Icon */
+        .stat-badge:hover {
+            transform: translateY(-3px) rotate(-1deg);
+        }
+
         .custom-icon {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             object-fit: contain;
-            filter: invert(1); /* Keeps the icon crisp white to match the theme */
+            transition: filter var(--transition-speed) ease;
         }
 
-        /* Links Grid */
+        body.noir-mode .custom-icon {
+            filter: invert(1);
+        }
+
+        /* Links Grid (3D Index Cards) */
         .links-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.2rem;
+            gap: 1.5rem;
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 4rem;
+            max-width: 580px;
+            margin-bottom: 3.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .card {
-            background: rgba(18, 18, 18, 0.85); 
-            border: 1px solid #262626; 
-            border-radius: 12px;
-            padding: 1.2rem;
+            background: var(--card-bg); 
+            border: 1.5px solid var(--border-ink); 
+            border-radius: 4px;
+            padding: 1.4rem 1.5rem;
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(4px);
-            transition: all 0.4s ease;
+            box-shadow: 4px 4px 0px var(--border-ink);
+            transform-style: preserve-3d;
+            backdrop-filter: blur(8px);
+            transition: box-shadow 0.25s ease, background var(--transition-speed) ease, border-color var(--transition-speed) ease, transform 0.15s ease-out;
+        }
+
+        /* Masking tape strip */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-1.5deg);
+            width: 56px;
+            height: 15px;
+            background: var(--tape-color);
+            border-left: 1px dashed rgba(0,0,0,0.2);
+            border-right: 1px dashed rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, background var(--transition-speed) ease;
+        }
+
+        /* Dog-ear page curl */
+        .card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            background: linear-gradient(135deg, transparent 45%, rgba(0,0,0,0.1) 50%, var(--border-ink) 55%, var(--card-bg) 100%);
+            border-top-left-radius: 4px;
+            box-shadow: -2px -2px 3px rgba(0,0,0,0.1);
+            transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1), height 0.28s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            border-color: #ffffff; 
-            background: rgba(26, 26, 26, 0.95);
+            box-shadow: 8px 8px 0px var(--border-ink);
+        }
+
+        .card:hover::after {
+            width: 24px;
+            height: 24px;
+        }
+
+        .card:hover::before {
+            transform: translateX(-50%) rotate(1.5deg) scale(1.04);
+        }
+
+        .card:active {
+            transform: scale(0.99) !important;
+            box-shadow: 2px 2px 0px var(--border-ink);
         }
 
         .card-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.45rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            color: var(--ink-main);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .card-title i {
+            font-size: 0.95rem;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card:hover .card-title i {
+            transform: translateX(6px);
         }
 
         .card-description {
-            font-size: 0.9rem;
-            color: #a3a3a3;
-            line-height: 1.4;
+            font-size: 0.85rem;
+            color: var(--ink-muted);
+            line-height: 1.55;
+            transition: color var(--transition-speed) ease;
         }
 
         /* Contact Section */
         .contact-section {
             text-align: center;
             width: 100%;
-            max-width: 600px;
+            max-width: 580px;
             padding: 2rem 1rem;
-            border-top: 1px solid #262626;
+            border-top: 1.5px dashed var(--border-ink);
             margin-bottom: 6rem;
+            position: relative;
+            z-index: 1;
+            transition: border-color var(--transition-speed) ease;
+        }
+
+        .contact-heading {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--ink-main);
+            transition: color var(--transition-speed) ease;
         }
 
         .contact-links {
             display: flex;
             justify-content: center;
-            gap: 2.5rem;
-            margin-top: 1.5rem;
+            gap: 2rem;
+            margin-top: 1.4rem;
         }
 
         .contact-icon-btn {
-            color: #a3a3a3;
-            font-size: 1.6rem;
-            transition: 0.3s;
+            color: var(--ink-main);
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-ink);
+            width: 44px;
+            height: 44px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 3px 3px 0px var(--border-ink);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
             text-decoration: none;
         }
 
         .contact-icon-btn:hover {
-            color: #ffffff;
-            transform: scale(1.2);
+            transform: translateY(-4px) rotate(-4deg);
+            box-shadow: 5px 6px 0px var(--border-ink);
         }
 
         /* Audio Player */
         .audio-player-container {
             position: fixed;
-            bottom: 16px;
+            bottom: 20px;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(18, 18, 18, 0.9);
-            border: 1px solid #262626;
-            backdrop-filter: blur(12px);
-            padding: 10px 16px;
-            border-radius: 30px;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-ink);
+            box-shadow: 4px 4px 0px var(--border-ink);
+            padding: 10px 18px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 12px;
             z-index: 9999;
             width: calc(100% - 32px);
-            max-width: 340px;
+            max-width: 350px;
+            opacity: 0;
+            backdrop-filter: blur(12px);
+            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s, opacity 0.7s ease 0.5s, background var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        body.entered .audio-player-container {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .track-info {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color var(--transition-speed) ease;
+        }
+
+        /* Mini Animated Equalizer Bars */
+        .eq-bars {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 11px;
+        }
+
+        .eq-bars span {
+            width: 2px;
+            height: 3px;
+            background: var(--ink-main);
+            transition: height 0.2s ease, background var(--transition-speed) ease;
+        }
+
+        .eq-bars.playing span:nth-child(1) { animation: eqBounce 0.6s infinite ease-in-out alternate; }
+        .eq-bars.playing span:nth-child(2) { animation: eqBounce 0.45s infinite ease-in-out alternate 0.2s; }
+        .eq-bars.playing span:nth-child(3) { animation: eqBounce 0.7s infinite ease-in-out alternate 0.1s; }
+
+        @keyframes eqBounce {
+            0% { height: 2px; }
+            100% { height: 11px; }
         }
 
         .audio-btn, .bg-toggle-btn {
             background: none;
             border: none;
-            color: #ffffff;
-            font-size: 1rem;
+            color: var(--ink-main);
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: transform 0.2s ease, opacity 0.2s, color var(--transition-speed) ease;
+        }
+
+        .audio-btn:hover, .bg-toggle-btn:hover {
+            transform: scale(1.15);
         }
 
         .bg-toggle-btn {
-            color: #a3a3a3;
-            padding-left: 4px;
-            border-left: 1px solid #262626;
+            color: var(--ink-muted);
+            padding-left: 10px;
+            border-left: 1.5px dashed var(--border-ink);
+            transition: border-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
         .volume-slider {
             -webkit-appearance: none;
             width: 55px;
-            height: 3px;
-            background: #262626;
+            height: 2px;
+            background: var(--border-ink);
             cursor: pointer;
+            transition: background var(--transition-speed) ease;
         }
 
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 12px; height: 12px;
-            background: #ffffff;
-            border-radius: 50%;
+            width: 12px; 
+            height: 12px;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-ink);
+            border-radius: 2px;
+            transition: transform 0.15s ease, background var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
 
         #youtube-player-wrapper { display: none; }
-
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div id="paper-scraps-container"></div>
     <div class="bg-gif-layer" id="background-gif"></div>
 
     <div id="enter-overlay">
@@ -290,17 +601,22 @@
 
     <!-- AUDIO PLAYER -->
     <div class="audio-player-container">
-        <button class="audio-btn" id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
-        <span class="track-info">Hinoki Wood</span>
-        <input type="range" class="volume-slider" id="volume-control" min="0" max="100" value="50">
-        <button class="bg-toggle-btn" id="bg-toggle"><i class="fa-solid fa-video"></i></button>
+        <button class="audio-btn" id="play-pause-btn" aria-label="Play or Pause"><i class="fa-solid fa-play"></i></button>
+        <span class="track-info">
+            <span class="eq-bars" id="eq-bars"><span></span><span></span><span></span></span>
+            Hinoki Wood
+        </span>
+        <input type="range" class="volume-slider" id="volume-control" min="0" max="100" value="50" aria-label="Volume">
+        <button class="bg-toggle-btn" id="bg-toggle" aria-label="Toggle Background"><i class="fa-solid fa-video"></i></button>
     </div>
 
     <!-- PROFILE -->
-    <div class="profile-container">
-        <img src="https://i.imgur.com/H5m4U6F.gif" alt="Thorfinn" class="profile-pic">
+    <div class="profile-container paper-reveal" style="transition-delay: 0.1s;">
+        <div class="profile-pic-frame">
+            <img src="https://i.imgur.com/H5m4U6F.gif" alt="Thorfinn" class="profile-pic">
+        </div>
         <h1 class="profile-name">Lyzy | Kim</h1>
-        <p class="profile-bio">Web Developer, Designer & Roblox Game Developer. "I have no enemies."</p>
+        <p class="profile-bio"><span id="typewriter-text"></span><span class="cursor-blink"></span></p>
         
         <div class="stats-row">
             <div class="stat-badge">
@@ -309,7 +625,6 @@
             </div>
 
             <div class="stat-badge">
-                <!-- Embedded the customized direct image link from PostImages below -->
                 <img src="https://i.postimg.cc/V5G17QVF/download-removebg-preview.png" class="custom-icon" alt="Robux Icon">
                 <span>Robux Generated: <span id="robux-counter">0</span></span>
             </div>
@@ -318,45 +633,113 @@
 
     <!-- CARDS -->
     <div class="links-grid">
-        <a href="https://roblox-game-checker.onrender.com" target="_blank" class="card">
+        <a href="https://roblox-game-checker.onrender.com" target="_blank" class="card paper-reveal tilt-card" style="transition-delay: 0.25s;">
             <div class="card-title">Roblox Tools <i class="fa-solid fa-arrow-right"></i></div>
             <p class="card-description">Used to Scan User, Game, and live data.</p>
         </a>
-        <a href="https://getlinkgrabify.onrender.com" target="_blank" class="card">
+        <a href="https://getlinkgrabify.onrender.com" target="_blank" class="card paper-reveal tilt-card" style="transition-delay: 0.38s;">
             <div class="card-title">Video Downloader <i class="fa-solid fa-arrow-right"></i></div>
             <p class="card-description">Paste any link. Choose your quality. Done.</p>
         </a>
-        <a href="https://ai-pro-prompter.onrender.com" target="_blank" class="card">
+        <a href="https://ai-pro-prompter.onrender.com" target="_blank" class="card paper-reveal tilt-card" style="transition-delay: 0.51s;">
             <div class="card-title">PromptLens <i class="fa-solid fa-arrow-right"></i></div>
             <p class="card-description">Drop an image. Get the prompt.</p>
         </a>
-         <a href="https://workai.onrender.com" target="_blank" class="card">
+        <a href="https://workai.onrender.com" target="_blank" class="card paper-reveal tilt-card" style="transition-delay: 0.64s;">
             <div class="card-title">WorkAi <i class="fa-solid fa-arrow-right"></i></div>
             <p class="card-description">WorkAI combines fast Groq inference with deep multi-step research, smart templates, and cloud sync — all in one place.</p>
         </a>
     </div>
 
     <!-- CONTACT -->
-    <div class="contact-section">
+    <div class="contact-section paper-reveal" style="transition-delay: 0.75s;">
         <h2 class="contact-heading">Connect With Me</h2>
         <div class="contact-links">
-            <a href="mailto:kimmendezfeb01@gmail.com" class="contact-icon-btn"><i class="fa-solid fa-envelope"></i></a>
-            <a href="https://github.com/Lyzy01" target="_blank" class="contact-icon-btn"><i class="fa-brands fa-github"></i></a>
-            <a href="https://discord.com/users/kimmendez01" target="_blank" class="contact-icon-btn"><i class="fa-brands fa-discord"></i></a>
+            <a href="mailto:kimmendezfeb01@gmail.com" class="contact-icon-btn" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+            <a href="https://github.com/Lyzy01" target="_blank" class="contact-icon-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://discord.com/users/kimmendez01" target="_blank" class="contact-icon-btn" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
         </div>
     </div>
 
     <script>
-        // SLOW YOUTUBE STYLE COUNTER INTERPOLATION
+        // 1. Floating Paper Scraps Generator
+        const scrapsContainer = document.getElementById('paper-scraps-container');
+        for (let i = 0; i < 12; i++) {
+            const scrap = document.createElement('div');
+            scrap.className = 'paper-scrap';
+            const width = Math.random() * 14 + 8;
+            const height = Math.random() * 18 + 10;
+            scrap.style.width = `${width}px`;
+            scrap.style.height = `${height}px`;
+            scrap.style.left = `${Math.random() * 100}vw`;
+            scrap.style.animationDuration = `${Math.random() * 14 + 14}s`;
+            scrap.style.animationDelay = `-${Math.random() * 20}s`;
+            scrapsContainer.appendChild(scrap);
+        }
+
+        // 2. Ink Ripple Effect on Click
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'ink-ripple';
+            ripple.style.left = `${e.clientX}px`;
+            ripple.style.top = `${e.clientY}px`;
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 750);
+        });
+
+        // 3. 3D Tactile Paper Tilt on Cards
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -4;
+                const rotateY = ((x - centerX) / centerX) * 4;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+            });
+        });
+
+        // 4. Typewriter Bio Animation
+        const bioLine1 = "Web Developer, Designer & Roblox Game Developer.";
+        const bioLine2 = '"I have no enemies."';
+        const typewriterEl = document.getElementById('typewriter-text');
+
+        function startTypewriter() {
+            let i = 0;
+            function typeFirst() {
+                if (i < bioLine1.length) {
+                    typewriterEl.innerHTML += bioLine1.charAt(i);
+                    i++;
+                    setTimeout(typeFirst, 32);
+                } else {
+                    typewriterEl.innerHTML += "<br><em>";
+                    let j = 0;
+                    function typeSecond() {
+                        if (j < bioLine2.length) {
+                            typewriterEl.innerHTML = bioLine1 + "<br><em>" + bioLine2.slice(0, j + 1) + "</em>";
+                            j++;
+                            setTimeout(typeSecond, 45);
+                        }
+                    }
+                    setTimeout(typeSecond, 250);
+                }
+            }
+            typeFirst();
+        }
+
+        // 5. Counter Interpolation
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                
-                // Cubic ease-out deceleration curve mimicry
                 const easeOutProgress = 1 - Math.pow(1 - progress, 3);
-                
                 const currentVal = Math.floor(easeOutProgress * (end - start) + start);
                 obj.innerHTML = currentVal.toLocaleString();
                 if (progress < 1) {
@@ -366,6 +749,7 @@
             window.requestAnimationFrame(step);
         }
 
+        // 6. YouTube Audio Player & Enter Sequence
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -377,6 +761,27 @@
         const volumeControl = document.getElementById('volume-control');
         const bgToggleBtn = document.getElementById('bg-toggle');
         const backgroundGif = document.getElementById('background-gif');
+        const eqBars = document.getElementById('eq-bars');
+        let hasEntered = false;
+
+        function triggerEnterSequence() {
+            if (hasEntered) return;
+            hasEntered = true;
+            overlay.classList.add('page-peel');
+            document.body.classList.add('entered');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                startTypewriter();
+                animateValue(document.getElementById("robux-counter"), 0, 132435742, 8000);
+            }, 450);
+        }
+
+        overlay.addEventListener('click', () => {
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
+            }
+            triggerEnterSequence();
+        });
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
@@ -388,29 +793,30 @@
 
         function onPlayerReady(event) {
             player.setVolume(50);
-            overlay.addEventListener('click', () => {
+            if (hasEntered) {
                 player.playVideo();
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    // Fires the 8000ms (8 seconds) deceleration calculation sequence
-                    animateValue(document.getElementById("robux-counter"), 0, 132435742, 8000);
-                }, 800);
-            });
+            }
             volumeControl.addEventListener('input', (e) => player.setVolume(e.target.value));
             playPauseBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 player.getPlayerState() === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
             });
+            
+            // Dynamic Background & Noir Design Toggle
             bgToggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 backgroundGif.classList.toggle('active');
-                bgToggleBtn.style.color = backgroundGif.classList.contains('active') ? '#ffffff' : '#a3a3a3';
+                document.body.classList.toggle('noir-mode');
+                
+                const isActive = backgroundGif.classList.contains('active');
+                bgToggleBtn.style.color = isActive ? 'var(--ink-main)' : 'var(--ink-muted)';
             });
         }
 
         function onPlayerStateChange(event) {
-            playPauseBtn.innerHTML = event.data === YT.PlayerState.PLAYING ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+            const isPlaying = event.data === YT.PlayerState.PLAYING;
+            playPauseBtn.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+            eqBars.classList.toggle('playing', isPlaying);
         }
     </script>
 </body>
